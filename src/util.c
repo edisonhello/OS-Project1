@@ -11,19 +11,6 @@ int Cmp_ReadyTime(const void *_a, const void *_b) {
 	return 0;
 }
 
-// void SetSignalHandler(void (*handler)(int)) {
-// 	struct sigaction act;
-// 
-// 	act.sa_handler = handler;
-// 	sigemptyset(&act.sa_mask);
-// 	act.sa_flags = 0;
-// 
-// 	if (sigaction(SIGCHLD, &act, 0)) {
-// 		fprintf(stderr, "sigaction error\n");
-// 		exit(1);
-// 	}
-// }
-
 void SetProcessCPU(pid_t pid, int id) {
 	if (id >= CPU_SETSIZE) {
 		fprintf(stderr, "SetProcessCPU get id too big: id = %d\n", id);
@@ -74,6 +61,6 @@ void StartProcess(struct Process *p) {
 		p->running = 0;
 
 		printf("%s %d\n", p->name, (int)p->pid);
-
+		fflush(stdout);
 	}
 }
