@@ -6,7 +6,6 @@ void Scheduler_FIFO(struct Process *ps, int n) {
 		if (ps[cur_job].running && ps[cur_job].t == 0) {
 			ps[cur_job].running = 0;
 			wait(0);
-			fprintf(stderr, "Job %d done\n", cur_job);
 
 			if (cur_job == n - 1) exit(0);
 

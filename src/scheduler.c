@@ -3,7 +3,7 @@
 enum Policy GetPolicy() {
 	char str[10];
 	memset(str, 0, 10);
-	scanf("%s", str);
+	assert(scanf("%s", str) == 1);
 
 	if (strcmp(str, "FIFO") == 0) return FIFO;
 	if (strcmp(str, "RR") == 0) return RR;
@@ -18,12 +18,12 @@ int main() {
 	enum Policy policy = GetPolicy();
 
 	int n;
-	scanf("%d", &n);
+	assert(scanf("%d", &n) == 1);
 
 	struct Process ps[n];
 	memset(ps, 0, sizeof(ps));
 	for (int i = 0; i < n; ++i) {
-		scanf("%s%d%d", ps[i].name, &ps[i].s, &ps[i].t);
+		assert(scanf("%s%d%d", ps[i].name, &ps[i].s, &ps[i].t) == 3);
 		ps[i]._oi = i;
 	}
 

@@ -41,8 +41,6 @@ void SetProcessCPU(pid_t pid, int id) {
 }
 
 void SetPriority(pid_t pid, int pri) {
-	fprintf(stderr, "Debug: set pid %d priority to %d\n", pid, pri);
-
 	struct sched_param para;
 	para.sched_priority = pri;
 
@@ -56,23 +54,19 @@ void StartProcess(struct Process *p) {
 	pid_t pid = fork();
 
 	if (pid < 0) {
-		fprintf(stderr, "Fork error\n");
+		fprintf(stderr, "fork error\n");
 		exit(1);
 	}
 
-	if (pid == 0) { // child
+	if (pid == 0) {
 		struct timespec start, end;
 		syscall(333, &start);
-		fprintf(stderr, "Debug: job %s start\n", p->name);
 		for (int i = 0; i < p->t; ++i) 
 			TIME_UNIT;
 		syscall(333, &end);
-		fprintf(stderr, "Debug: job %s end\n", p->name);
 		syscall(334, getpid(), start.tv_sec, start.tv_nsec, end.tv_sec, end.tv_nsec);
 		exit(0);
-	} else { // parent
-		fprintf(stderr, "Debug: Fork, child pid %d\n", pid);
-
+	} else { 
 		SetProcessCPU(pid, 1);
 		SetPriority(pid, 1);
 		p->pid = pid;
