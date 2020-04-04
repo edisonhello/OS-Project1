@@ -14,14 +14,6 @@ enum Policy GetPolicy() {
 	exit(1);
 }
 
-void Scheduler_SJF(struct Process *ps, int n) {
-
-}
-
-void Scheduler_PSJF(struct Process *ps, int n) {
-
-}
-
 int main() {
 	enum Policy policy = GetPolicy();
 
@@ -29,8 +21,13 @@ int main() {
 	scanf("%d", &n);
 
 	struct Process ps[n];
-	for (int i = 0; i < n; ++i) 
+	memset(ps, 0, sizeof(ps));
+	for (int i = 0; i < n; ++i) {
 		scanf("%s%d%d", ps[i].name, &ps[i].s, &ps[i].t);
+		ps[i]._oi = i;
+	}
+
+	qsort((void *)ps, n, sizeof(struct Process), Cmp_ReadyTime);
 
 	SetProcessCPU(getpid(), 0);
 

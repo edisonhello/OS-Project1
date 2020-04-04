@@ -1,13 +1,12 @@
 #include "FIFO.h"
 
 void Scheduler_FIFO(struct Process *ps, int n) {
-	qsort((void *)ps, n, sizeof(struct Process), Cmp_ReadyTime);
-
 	int cur_job = 0, runnable_job = 0;
 	for (int now_time = 0; ; ++now_time) {
 		if (ps[cur_job].running && ps[cur_job].t == 0) {
 			ps[cur_job].running = 0;
 			wait(0);
+			fprintf(stderr, "Job %d done\n", cur_job);
 
 			if (cur_job == n - 1) exit(0);
 
@@ -27,7 +26,6 @@ void Scheduler_FIFO(struct Process *ps, int n) {
 		TIME_UNIT;
 
 		if (ps[cur_job].running) {
-			assert(ps[cur_job].spawned);
 			--ps[cur_job].t;
 		}
 	}

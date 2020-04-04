@@ -6,6 +6,8 @@ int Cmp_ReadyTime(const void *_a, const void *_b) {
 
 	if (a->s < b->s) return -1;
 	if (a->s > b->s) return 1;
+	if (a->_oi < b->_oi) return -1;
+	if (a->_oi > b->_oi) return 1;
 	return 0;
 }
 
@@ -39,6 +41,8 @@ void SetProcessCPU(pid_t pid, int id) {
 }
 
 void SetPriority(pid_t pid, int pri) {
+	fprintf(stderr, "Debug: set pid %d priority to %d\n", pid, pri);
+
 	struct sched_param para;
 	para.sched_priority = pri;
 
@@ -58,13 +62,17 @@ void StartProcess(struct Process *p) {
 
 	if (pid == 0) { // child
 		struct timespec start, end;
-		syscall(-1, &start);
+		syscall(333, &start);
+		fprintf(stderr, "Debug: job %s start\n", p->name);
 		for (int i = 0; i < p->t; ++i) 
 			TIME_UNIT;
-		syscall(-1, &end);
-		syscall(-2, getpid(), &start, &end);
+		syscall(333, &end);
+		fprintf(stderr, "Debug: job %s end\n", p->name);
+		syscall(334, getpid(), start.tv_sec, start.tv_nsec, end.tv_sec, end.tv_nsec);
 		exit(0);
 	} else { // parent
+		fprintf(stderr, "Debug: Fork, child pid %d\n", pid);
+
 		SetProcessCPU(pid, 1);
 		SetPriority(pid, 1);
 		p->pid = pid;
@@ -72,5 +80,6 @@ void StartProcess(struct Process *p) {
 		p->running = 0;
 
 		printf("%s %d\n", p->name, (int)p->pid);
+
 	}
 }

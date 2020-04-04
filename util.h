@@ -26,6 +26,7 @@ struct Process {
 	int spawned; // process is spawned
 	int running; // process is running
 	pid_t pid; // process pid
+	int _oi;
 };
 
 int Cmp_ReadyTime(const void *_a, const void *_b);

@@ -7,10 +7,9 @@
 
 #include "FIFO.h"
 #include "RR.h"
+#include "SJF.h"
+#include "PSJF.h"
 
 enum Policy GetPolicy();
-
-void Scheduler_SJF(struct Process *ps, int n);
-void Scheduler_PSJF(struct Process *ps, int n);
 
 #endif // _SCHEDULER_H_
