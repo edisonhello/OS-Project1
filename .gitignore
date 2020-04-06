@@ -1,5 +1,3 @@
 scheduler
 src/*.o
 src/scheduler
-
-result
