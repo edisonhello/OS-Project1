@@ -74,15 +74,15 @@ async function Simulation(td) {
 				q.splice(0, 1)
 			}
 
+			while (it < td.length && td[it].start <= nt) {
+				q.push({ name: td[it].name, start: -1, duration: td[it].duration })
+				it++
+			}
+
 			if (rrc == 0) {
 				let z = q.splice(0, 1)
 				q.push(z[0])
 				rrc = 500
-			}
-
-			while (it < td.length && td[it].start <= nt) {
-				q.push({ name: td[it].name, start: -1, duration: td[it].duration })
-				it++
 			}
 
 			if (q.length) {
@@ -94,7 +94,7 @@ async function Simulation(td) {
 			nt++
 		}
 	}, SJF: td => {
-		let pq = new (PriorityQueue())((a, b) => { return a.duration < b.duration })
+		let pq = new (PriorityQueue())((a, b) => { return a._.duration == b._.duration ? a.i < b.i : a._.duration < b._.duration })
 		let job = undefined
 		let nt = 0, it = 0
 		while (1) {
@@ -106,12 +106,12 @@ async function Simulation(td) {
 			}
 
 			while (it < td.length && td[it].start <= nt) {
-				pq.push(td[it])
+				pq.push({ i: it, _: td[it] })
 				it++
 			}
 
 			if (job === undefined && pq.size()) {
-				job = pq.pop()
+				job = pq.pop()._
 				job.start = nt
 			}
 
@@ -156,6 +156,23 @@ async function Simulation(td) {
 	return rt
 }
 
+async function Judge(test, res, thr, thr_t, imp, TIME_UNIT) {
+	Object.keys(imp).forEach(i => {
+		let pname = imp[i]
+		let exp_start = thr[pname].start
+		let exp_end = thr[pname].end
+		let start_t = res[i].start
+		let end_t = res[i].end
+		let start_tick = start_t / TIME_UNIT
+		let end_tick = end_t / TIME_UNIT
+		let diff_s = (start_tick - exp_start) / exp_start
+		let diff_e = (end_tick - exp_end) / exp_end
+		if (isNaN(diff_s)) diff_s = 0
+		console.log(`Process ${pname} expected start at tick ${exp_start}, started at tick ${start_tick.toFixed(2)} (${start_t.toFixed(2)} second) (difference ${(diff_s * 100).toFixed(2)}%)`)
+		console.log(`Process ${pname} expected  end  at tick ${exp_end}, started at tick ${end_tick.toFixed(2)} (${end_t.toFixed(2)} second) (difference ${(diff_e * 100).toFixed(2)}%)`)
+	})
+}
+
 async function main() {
 	const TIME_UNIT = await CalcTimeUnit()
 	console.log(`Realtime unit = ${TIME_UNIT} seconds`)
@@ -177,15 +194,23 @@ async function main() {
 		let exet = await GetResult(path.join(output_folder, kern), inp, TIME_UNIT)
 
 		let ther = await Simulation(inp)
-		ther = Object.keys(ther).reduce((_, v, i, a) => {
+		let ther_time = Object.keys(ther).reduce((_, v, i, a) => {
 			_[mp[v]] = { start: ther[v].start * TIME_UNIT, end: (ther[v].end - 1) * TIME_UNIT }
 			return _
 		}, {})
 
-		console.log('inp', inp)
+		let imp = Object.keys(mp).reduce((_, v, i, a) => {
+			_[mp[v]] = v
+			return _
+		}, {})
+
+		// console.log('inp', inp)
 		// console.log('mp', mp)
-		console.log('exet', exet)
-		console.log('ther', ther)
+		// console.log('imp', imp)
+		// console.log('exet', exet)
+		// console.log('ther', ther)
+		
+		Judge(test, exet, ther, ther_time, imp, TIME_UNIT)
 	}
 }
 

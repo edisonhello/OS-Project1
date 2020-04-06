@@ -1,5 +1,5 @@
 CC := gcc
-flags := -std=c11 -W -Wall -Wextra -g
+flags := -std=c11 -W -Wall -Wextra -g -O3
 
 all: scheduler
 

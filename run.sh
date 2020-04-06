@@ -8,11 +8,10 @@ fi
 in_folder="testset"
 out_folder="output"
 
-rm -rf $out_folder
 mkdir -p $out_folder
 
 dmesg -C
-for i in $in_folder/*; do
+for i in $in_folder/TI*; do
 	echo "Processing $i..."
 	fullname=$(basename $i)
 	testname=$(cut -f 1 -d '.' <<< $fullname)
