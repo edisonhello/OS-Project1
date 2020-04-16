@@ -12,6 +12,7 @@ dmesg -C
 for i in TIME_MEASUREMENT FIFO_1 PSJF_2 RR_3 SJF_4;
 do
 	echo Demoing $i ...
-	./scheduler < $in_folder/$i.txt
+	../scheduler < $in_folder/$i.txt
 	dmesg -c | grep Project1
+	echo ""
 done
