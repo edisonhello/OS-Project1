@@ -168,8 +168,18 @@ async function Judge(test, res, thr, thr_t, imp, TIME_UNIT) {
 		let diff_s = (start_tick - exp_start) / exp_start
 		let diff_e = (end_tick - exp_end) / exp_end
 		if (isNaN(diff_s)) diff_s = 0
-		console.log(`Process ${pname} expected start at tick ${exp_start}, started at tick ${start_tick.toFixed(2)} (${start_t.toFixed(2)} second) (difference ${(diff_s * 100).toFixed(2)}%)`)
-		console.log(`Process ${pname} expected  end  at tick ${exp_end}, started at tick ${end_tick.toFixed(2)} (${end_t.toFixed(2)} second) (difference ${(diff_e * 100).toFixed(2)}%)`)
+
+		exp_start = exp_start.toString().padStart(5)
+		exp_end = exp_end.toString().padStart(5)
+		start_tick = start_tick.toFixed(2).toString().padStart(8)
+		end_tick = end_tick.toFixed(2).toString().padStart(8)
+		start_t = start_t.toFixed(2).toString().padStart(6)
+		end_t = end_t.toFixed(2).toString().padStart(6)
+		diff_s = (diff_s * 100).toFixed(2).toString().padStart(5)
+		diff_e = (diff_e * 100).toFixed(2).toString().padStart(5)
+
+		console.log(`Process ${pname} expected start at tick ${exp_start}, started at tick ${start_tick} (${start_t} second) (difference ${diff_s}%)`)
+		console.log(`Process ${pname} expected  end  at tick ${exp_end}, started at tick ${end_tick} (${end_t} second) (difference ${diff_e}%)`)
 	})
 }
 
