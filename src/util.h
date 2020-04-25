@@ -13,25 +13,23 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define kProcessNameLength 32
+#define kProcessNameLength 31
 
 #define TIME_UNIT { volatile unsigned long i; for (i = 0; i < 1000000UL; i++); }
 
 enum Policy { FIFO, RR, SJF, PSJF };
 
 struct Process {
-	char name[kProcessNameLength];
+	char name[kProcessNameLength + 1];
 	int s; // ready time
 	int t; // execution time
 	int spawned; // process is spawned
 	int running; // process is running
 	pid_t pid; // process pid
-	int _oi;
+	int _oi; // original order as second key when sorting by ready time
 };
 
 int Cmp_ReadyTime(const void *_a, const void *_b);
-
-// void SetSignalHandler(void (*handler)(int));
 
 void SetProcessCPU(pid_t pid, int id);
 void SetPriority(pid_t pid, int pri);

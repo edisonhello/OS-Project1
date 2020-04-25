@@ -7,7 +7,7 @@ void Scheduler_FIFO(struct Process *ps, int n) {
 			ps[cur_job].running = 0;
 			wait(0);
 
-			if (cur_job == n - 1) exit(0);
+			if (cur_job == n - 1) return;
 
 			++cur_job;
 		}

@@ -17,7 +17,7 @@ void Scheduler_RR(struct Process *ps, int n) {
 
 			free(now);
 
-			if (!head && runnable_job == n) exit(0);
+			if (!head && runnable_job == n) return;
 		}
 
 		while (runnable_job < n && ps[runnable_job].s <= now_time) {

@@ -9,7 +9,7 @@ void Scheduler_SJF(struct Process *ps, int n) {
 			p->running = 0;
 			wait(0);
 
-			if (runnable_job == n && !root) exit(0);
+			if (runnable_job == n && !root) return;
 			p = 0;
 		}
 
