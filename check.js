@@ -45,7 +45,7 @@ async function CalcTimeUnit() {
 	let inp = await ReadInput(path.join(test_folder, 'TIME_MEASUREMENT.txt'))
 	let mp = await GetNamePidMap(path.join(output_folder, 'TIME_MEASUREMENT_stdout.txt'))
 	let exet = await GetResult(path.join(output_folder, 'TIME_MEASUREMENT_dmesg.txt'))
-	return exet[mp['P9']].end / (inp.jobs[9].start + inp.jobs[9].duration)
+	return (exet[mp['P9']].end - 1) / (inp.jobs[9].start + inp.jobs[9].duration)
 }
 
 async function Simulation(td) {
@@ -192,7 +192,7 @@ async function main() {
 	for (let input of tests) {
 		let test = input.replace(/\.[^/.]+$/, "")
 
-		if (test === 'TIME_MEASUREMENT') continue
+		// if (test === 'TIME_MEASUREMENT') continue
 
 		let output = `${test}_stdout.txt`
 		let kern = `${test}_dmesg.txt`
