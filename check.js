@@ -45,7 +45,7 @@ async function CalcTimeUnit() {
 	let inp = await ReadInput(path.join(test_folder, 'TIME_MEASUREMENT.txt'))
 	let mp = await GetNamePidMap(path.join(output_folder, 'TIME_MEASUREMENT_stdout.txt'))
 	let exet = await GetResult(path.join(output_folder, 'TIME_MEASUREMENT_dmesg.txt'))
-	return (exet[mp['P9']].end - 1) / (inp.jobs[9].start + inp.jobs[9].duration)
+	return exet[mp['P9']].end / (inp.jobs[9].start + inp.jobs[9].duration)
 }
 
 async function Simulation(td) {
@@ -179,7 +179,7 @@ async function Judge(test, res, thr, thr_t, imp, TIME_UNIT) {
 		diff_e = (diff_e * 100).toFixed(2).toString().padStart(5)
 
 		console.log(`Process ${pname} expected start at tick ${exp_start}, started at tick ${start_tick} (${start_t} second) (difference ${diff_s}%)`)
-		console.log(`Process ${pname} expected  end  at tick ${exp_end}, started at tick ${end_tick} (${end_t} second) (difference ${diff_e}%)`)
+		console.log(`Process ${pname} expected  end  at tick ${exp_end},  ended  at tick ${end_tick} (${end_t} second) (difference ${diff_e}%)`)
 	})
 }
 
@@ -205,7 +205,7 @@ async function main() {
 
 		let ther = await Simulation(inp)
 		let ther_time = Object.keys(ther).reduce((_, v, i, a) => {
-			_[mp[v]] = { start: ther[v].start * TIME_UNIT, end: (ther[v].end - 1) * TIME_UNIT }
+			_[mp[v]] = { start: ther[v].start * TIME_UNIT, end: (ther[v].end) * TIME_UNIT }
 			return _
 		}, {})
 
