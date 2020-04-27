@@ -11,7 +11,7 @@ out_folder="output"
 mkdir -p $out_folder
 
 dmesg -C
-for i in $in_folder/TI*; do
+for i in $in_folder/*; do
 	echo "Processing $i..."
 	fullname=$(basename $i)
 	testname=$(cut -f 1 -d '.' <<< $fullname)

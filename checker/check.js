@@ -3,8 +3,8 @@ const PriorityQueue = () => {const top=0,parent=c=>(c+1>>>1)-1,left=c=>(c<<1)+1,
 const fs = require('fs')
 const path = require('path')
 
-const test_folder = path.join(__dirname, 'testset')
-const output_folder = path.join(__dirname, 'output')
+const test_folder = path.join(__dirname, '..', 'testset')
+const output_folder = path.join(__dirname, '..', 'output')
 
 async function ReadInput(fname) {
 	let i = fs.readFileSync(fname, 'utf-8').replace(/\r\n$/gm, '').split('\r\n')
